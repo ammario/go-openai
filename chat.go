@@ -210,6 +210,17 @@ type ChatCompletionResponseFormatJSONSchema struct {
 	Strict      bool           `json:"strict"`
 }
 
+type PredictionContentPart struct {
+	Type    string `json:"type"`
+	Content string `json:"content,omitempty"`
+}
+
+type PredictionStaticContent struct {
+	Type string `json:"type"`
+	// Content can be string or []PredictionContentPart
+	Content any `json:"content"`
+}
+
 // ChatCompletionRequest represents a request structure for chat completion API.
 type ChatCompletionRequest struct {
 	Model    string                  `json:"model"`
@@ -260,6 +271,11 @@ type ChatCompletionRequest struct {
 	Store bool `json:"store,omitempty"`
 	// Metadata to store with the completion.
 	Metadata map[string]string `json:"metadata,omitempty"`
+	// Prediction configuration for predicted outputs, which can improve response times
+	// when large parts of the model response are known ahead of time.
+	//
+	// Right now can only be PredictionStaticContent.
+	Prediction *PredictionStaticContent `json:"prediction,omitempty"`
 }
 
 type StreamOptions struct {
